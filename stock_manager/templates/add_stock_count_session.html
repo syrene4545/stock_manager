@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Record Stock Count Session</h2>
+
+<form method="post" id="stock-count-form">
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>Session Date</legend>
+        {{ session_form.as_p }}
+    </fieldset>
+
+    <fieldset>
+        <legend>Stock Count Entries</legend>
+        {{ formset.management_form }}
+        <table id="count-table">
+            <thead>
+                <tr>
+                    <th>Stock Code</th>
+                    <th>Quantity Counted</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                <tr class="count-row">
+                    {% for field in form.visible_fields %}
+                    <td>{{ field }}</td>
+                    {% endfor %}
+                    <td><button type="button" class="remove-row">✖</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" id="add-row">➕ Add Row</button>
+    </fieldset>
+
+    
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addRowBtn = document.getElementById('add-row');
+    const tableBody = document.querySelector('#count-table tbody');
+    const totalForms = document.querySelector('#id_form-TOTAL_FORMS');
+
+    addRowBtn.addEventListener('click', function () {
+        const formCount = parseInt(totalForms.value);
+        const newRow = document.querySelector('.count-row').cloneNode(true);
+
+        newRow.querySelectorAll('input, select').forEach(input => {
+            input.value = '';
+            input.name = input.name.replace(/form-\d+/, `form-${formCount}`);
+            input.id = input.id.replace(/form-\d+/, `form-${formCount}`);
+        });
+
+        totalForms.value = formCount + 1;
+        tableBody.appendChild(newRow);
+    });
+
+    tableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-row')) {
+            const row = e.target.closest('tr');
+            row.remove();
+        }
+    });
+});
+</script>
+{% endblock %}

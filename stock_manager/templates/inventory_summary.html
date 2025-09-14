@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<h2>📦 Inventory Summary</h2>
+
+<!-- Filter Form -->
+<form method="get" style="margin-bottom: 20px;">
+  <label for="search">Stock Code/Description:</label>
+  <input type="text" name="search" value="{{ search_query|default_if_none:'' }}" placeholder="e.g. ABC123">
+
+  <label for="start_date">From:</label>
+  <input type="date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+
+  <label for="end_date">To:</label>
+  <input type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+
+  <button type="submit">Filter</button>
+  <a href="{% url 'inventory_summary' %}">Reset</a>
+</form>
+
+<p>
+  Showing inventory summary for: <strong>{{ start_date|date:"Y-m-d" }}</strong>
+
+  <!-- Showing summary {% if start_date %} from <strong>{{ start_date|date:"Y-m-d" }}</strong>{% endif %}
+  {% if end_date %} to <strong>{{ end_date|date:"Y-m-d" }}</strong>{% endif %}
+  {% if search_query %} | Search: <strong>{{ search_query }}</strong>{% endif %} -->
+</p>
+
+{% if summary %}
+<table>
+  <thead>
+    <tr>
+      <th>Stock Code</th>
+      <th>Description</th>
+      <th>Count Date</th>
+      <th>System Qty</th>
+      <th>Counted Qty</th>
+      <th>Variance</th>
+      <th>Price</th>
+      <th>Valuation</th>
+      <th>Variance Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in summary %}
+      <tr>
+        <td>{{ row.stock_code }}</td>
+        <td>{{ row.description }}</td>
+        <td>{{ row.count_date }}</td>
+        <td>{{ row.system_quantity|intcomma }}</td>
+        <td>{{ row.counted_quantity|intcomma }}</td>
+        <td style="color:{% if row.variance < 0 %}red{% elif row.variance > 0 %}green{% else %}black{% endif %}">
+          {{ row.variance|intcomma }}
+        </td>
+        <td>R {{ row.latest_price|floatformat:2|intcomma }}</td>
+        <td>R {{ row.valuation|floatformat:2|intcomma }}</td>
+        <td style="color:{% if row.variance_value < 0 %}red{% elif row.variance_value > 0 %}green{% else %}black{% endif %}">
+          R {{ row.variance_value|floatformat:2|intcomma }}
+        </td>
+      </tr>
+    {% endfor %}
+    <tr style="font-weight:bold; background:#f2f2f2;">
+      <td colspan="3">TOTAL</td>
+      <td>{{ total_system_qty|intcomma }}</td>
+      <td>{{ total_counted_qty|intcomma }}</td>
+      <td>{{ total_variance_qty|intcomma }}</td>
+      <td></td>
+      <td>R {{ total_valuation|floatformat:2|intcomma }}</td>
+      <td>R {{ total_variance_value|floatformat:2|intcomma }}</td>
+    </tr>
+  </tbody>
+</table>
+{% else %}
+  <p>No stock counts found for the selected filters.</p>
+{% endif %}
+
+{% endblock %}

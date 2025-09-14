@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<h2>📊 Monthly Inventory Dashboard</h2>
+
+<!-- KPI Cards -->
+<div style="display: flex; gap: 20px; margin-bottom: 20px;">
+  <div><strong>Opening Stock</strong><br>{{ opening_stock|intcomma }} units<br>R {{ opening_value|floatformat:2|intcomma }}</div>
+  <div><strong>Purchases</strong><br>{{ purchases|intcomma }} units<br>R {{ purchases_value|floatformat:2|intcomma }}</div>
+  <div><strong>Sales</strong><br>{{ sales|intcomma }} units<br>R {{ sales_value|floatformat:2|intcomma }}</div>
+  
+  <div><strong>Closing Balance</strong><br>{{ closing_balance|intcomma }} units<br>R {{ closing_value|floatformat:2|intcomma }}</div>
+</div>
+
+<tr>
+  <td><strong>Variance (This Month):</strong></td>
+  <td>{{ variance_qty }}</td>
+</tr>
+
+
+<!-- Top Items -->
+<h3>Top 5 Sales This Month</h3>
+<table>
+  <thead>
+    <tr><th>Stock Code</th><th>Description</th><th>Quantity</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+  {% for item in top_sales_items %}
+    <tr>
+      <td>{{ item.stock_code__stock_code }}</td>
+      <td>{{ item.stock_code__stock_description }}</td>
+      <td>{{ item.total_qty|intcomma }}</td>
+      <td>R {{ item.total_value|floatformat:2|intcomma }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4">No sales this month</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h3>Top 5 Purchases This Month</h3>
+<table>
+  <thead>
+    <tr><th>Stock Code</th><th>Description</th><th>Quantity</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+  {% for item in top_purchases_items %}
+    <tr>
+      <td>{{ item.stock_code__stock_code }}</td>
+      <td>{{ item.stock_code__stock_description }}</td>
+      <td>{{ item.total_qty|intcomma }}</td>
+      <td>R {{ item.total_value|floatformat:2|intcomma }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4">No purchases this month</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<!-- Trend Data -->
+<h3>Purchases vs Sales (Last 6 Months)</h3>
+<table>
+  <thead>
+    <tr><th>Month</th><th>Purchases</th><th>Sales</th></tr>
+  </thead>
+  <tbody>
+  {% for row in trends %}
+    <tr>
+      <td>{{ row.month }}</td>
+      <td>{{ row.purchases|intcomma }}</td>
+      <td>{{ row.sales|intcomma }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h3>Quick Actions</h3>
+<ul>
+  <li><a href="{% url 'add_transaction' %}">➕ Add Stock Master</a></li>
+  <li><a href="{% url 'add_sales' %}">➕ Add Sales</a></li>
+  <li><a href="{% url 'add_purchases' %}">➕ Add Purchases</a></li>
+  <li><a href="{% url 'add_stock_count_session' %}">📋 Record Stock Count</a></li>
+  <li><a href="{% url 'transaction_list' %}">📑 View All Transactions</a></li>
+</ul>
+
+{% endblock %}

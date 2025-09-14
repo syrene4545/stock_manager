@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Sales Receipt</h2>
+
+<p><strong>Document Number:</strong> {{ header.document_number }}</p>
+<p><strong>Date:</strong> {{ header.transaction_date }}</p>
+<p><strong>Customer:</strong> {{ header.customer_name }}</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Stock Code</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Line Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in sales %}
+        <tr>
+            <td>{{ item.stock_code.stock_code }}</td>
+            <td>{{ item.stock_code.stock_description }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price_per_unit|floatformat:2 }}</td>
+            <td>{{ item.quantity|floatformat:2|add:item.price_per_unit|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2"><strong>Total</strong></td>
+            <td><strong>{{ total_qty }}</strong></td>
+            <td></td>
+            <td><strong>{{ total_value|floatformat:2 }}</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+<button onclick="window.print()">🖨️ Print Receipt</button>
+{% endblock %}

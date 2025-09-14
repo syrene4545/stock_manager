@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Management</title>
+    <style>
+        /* ---------- Defaults ---------- */
+        :root {
+            --tab-default-bg: #e6f3ff;
+            --tab-default-border: #cce0f5;
+
+            /* Will be overridden per theme on <body> */
+            --accent: #dddddd;
+            --accent-bg: #f7f7f7;
+            --panel-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.06);
+        }
+
+        /* ---------- Pastel themes (context-aware) ---------- */
+        body.theme-dashboard { --accent:#f5a3b3; --accent-bg:#ffd6e0; --panel-bg:#fff0f4; --shadow:rgba(245,163,179,.25); }
+        body.theme-master    { --accent:#a3d5ff; --accent-bg:#e6f3ff; --panel-bg:#f0f8ff; --shadow:rgba(163,213,255,.25); }
+        body.theme-purchases { --accent:#9cd6a5; --accent-bg:#d8f8e3; --panel-bg:#ecfdf0; --shadow:rgba(156,214,165,.25); }
+        body.theme-sales     { --accent:#ffc085; --accent-bg:#ffe6cc; --panel-bg:#fff6e9; --shadow:rgba(255,192,133,.25); }
+        body.theme-count     { --accent:#c3b4f7; --accent-bg:#ede7fb; --panel-bg:#f6f2fe; --shadow:rgba(195,180,247,.25); }
+        body.theme-transactions { --accent:#f7a9b8; --accent-bg:#ffe0e9; --panel-bg:#fff2f6; --shadow:rgba(247,169,184,.25); }
+        body.theme-summary   { --accent:#7edce2; --accent-bg:#d7f7f9; --panel-bg:#eafcfd; --shadow:rgba(126,220,226,.25); }
+
+        /* ---------- Base layout ---------- */
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            margin: 40px;
+            background-color: #fdfdfd;
+            color: #333;
+        }
+
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 0;            /* let content rise to meet tabs */
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 15px 15px 0 0;
+            text-decoration: none;
+            color: #444;
+            background-color: var(--tab-default-bg);
+            border: 1px solid var(--tab-default-border);
+            transition: all 0.25s ease;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            filter: brightness(0.98);
+            border-color: var(--accent);
+        }
+
+        .tab.active {
+            background-color: var(--accent-bg);
+            border-color: var(--accent);
+            color: #222;
+            border-bottom: none;         /* merge visually with content box */
+            position: relative;
+            z-index: 3;
+        }
+
+        .content {
+            border: 1px solid var(--accent);
+            padding: 25px;
+            border-radius: 0 15px 15px 15px;
+            background-color: var(--panel-bg);
+            box-shadow: 0 6px 14px var(--shadow);
+            margin-top: -1px;            /* pull up to “wrap” active tab */
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<!-- Add the theme class using your Django active_tab -->
+<body class="theme-{% if active_tab %}{{ active_tab }}{% else %}dashboard{% endif %}">
+    <h1>Inventory Management System</h1>
+
+    <div class="tabs">
+        <a href="{% url 'dashboard' %}"                 class="tab {% if active_tab == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{% url 'add_transaction' %}"           class="tab {% if active_tab == 'master' %}active{% endif %}">Stock Master</a>
+        <a href="{% url 'add_purchases' %}"             class="tab {% if active_tab == 'purchases' %}active{% endif %}">Purchases</a>
+        <a href="{% url 'add_sales' %}"                 class="tab {% if active_tab == 'sales' %}active{% endif %}">Sales</a>
+        <a href="{% url 'add_stock_count_session' %}"   class="tab {% if active_tab == 'count' %}active{% endif %}">Stock Count</a>
+        <a href="{% url 'transaction_list' %}"          class="tab {% if active_tab == 'transactions' %}active{% endif %}">Transactions</a>
+        <a href="{% url 'inventory_summary' %}"         class="tab {% if active_tab == 'summary' %}active{% endif %}">Inventory Summary</a>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

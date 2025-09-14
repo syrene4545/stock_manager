@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add Stock Transaction</h2>
+<form method="post">
+   
+    <fieldset>
+    <legend>Transaction Details</legend>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</fieldset>
+<style>
+.errorlist { color: red; font-weight: bold; }
+</style>
+
+</form>
+
+{% endblock %}    

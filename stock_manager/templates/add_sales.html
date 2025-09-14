@@ -1,0 +1,152 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add Sales Transactions</h2>
+
+{% if messages %}
+  <div class="messages-container">
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+
+<form method="post" id="sales-form">
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>Transaction Details</legend>
+        {{ header_form.as_p }}
+    </fieldset>
+
+    <fieldset>
+        <legend>Line Items</legend>
+        {{ formset.management_form }}
+        <table id="line-items-table">
+            <thead>
+                <tr>
+                    <th>Stock Code</th>
+                    <th>Quantity</th>
+                    <th>Price per Unit</th>
+                    <th>Line Total</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                <tr class="line-item">
+                    {% for field in form.visible_fields %}
+                    <td>{{ field }}</td>
+                    {% endfor %}
+                    <td class="line-total">0.00</td>
+                    <td><button type="button" class="remove-row">✖</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" id="add-row">➕ Add Row</button>
+
+        <p style="font-size: 1.2em; font-weight: bold; color: #2d662d;">
+        Total Invoice Value: <span id="invoice-total">0.00</span>
+        </p>
+
+    </fieldset>
+
+    <button type="submit" onclick="this.disabled=true; this.form.submit();">Submit Sales</button>
+
+</form>
+
+<style>
+.messages {
+  list-style: none;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #e6ffe6;
+  border: 1px solid #b2d8b2;
+  color: #2d662d;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addRowBtn = document.getElementById('add-row');
+    const tableBody = document.querySelector('#line-items-table tbody');
+    const totalForms = document.querySelector('#id_form-TOTAL_FORMS');
+
+    addRowBtn.addEventListener('click', function () {
+        let formCount = parseInt(totalForms.value);
+        const newRow = document.querySelector('.line-item').cloneNode(true);
+
+        // Update input/select/textarea fields
+        newRow.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.name) {
+                input.name = input.name.replace(/form-\d+/, `form-${formCount}`);
+            }
+            if (input.id) {
+                input.id = input.id.replace(/form-\d+/, `form-${formCount}`);
+            }
+            input.value = ''; // Clear previous value
+        });
+
+        // Append the new row
+        tableBody.appendChild(newRow);
+
+        // Update TOTAL_FORMS
+        totalForms.value = formCount + 1;
+    });
+
+    tableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-row')) {
+            const row = e.target.closest('tr');
+            row.remove();
+
+            // Optional: decrement TOTAL_FORMS if you want strict form count
+            // totalForms.value = parseInt(totalForms.value) - 1;
+        }
+    });
+});
+
+
+
+</script>
+
+<script>
+function calculateTotals() {
+  let total = 0;
+  document.querySelectorAll('.line-item').forEach(row => {
+    const qtyInput = row.querySelector('input[name$="quantity"]');
+    const priceInput = row.querySelector('input[name$="price_per_unit"]');
+    const totalCell = row.querySelector('.line-total');
+
+    const qty = parseFloat(qtyInput?.value) || 0;
+    const price = parseFloat(priceInput?.value) || 0;
+    const lineTotal = qty * price;
+
+    totalCell.textContent = lineTotal.toFixed(2);
+    total += lineTotal;
+  });
+
+  const invoiceTotal = document.getElementById('invoice-total');
+  if (invoiceTotal) {
+    invoiceTotal.textContent = total.toFixed(2);
+  }
+}
+
+document.addEventListener('input', function (e) {
+  if (e.target.name?.includes('quantity') || e.target.name?.includes('price_per_unit')) {
+    calculateTotals();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', calculateTotals);
+</script>
+
+
+{% endblock %}
+
+
+</body>
+</html>
