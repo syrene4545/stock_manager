@@ -15,6 +15,8 @@ from decimal import Decimal
 import calendar
 from django.contrib import messages
  
+def debug_view(request):
+    return HttpResponse(f"Host: {request.get_host()}")
 
 
 def audit_log_view(request):

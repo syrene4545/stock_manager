@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import audit_log_view
+from .views import debug_view
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
@@ -13,6 +14,7 @@ urlpatterns = [
     path('audit-log/', audit_log_view, name='audit_log'),
     path('sales/receipt/<str:document_number>/', views.sale_receipt, name='sale_receipt'),
     path('purchases/invoice/<str:document_number>/', views.purchase_invoice, name='purchase_invoice'),
+    path('debug/', debug_view),
 
 
 ]
