@@ -46,53 +46,53 @@
     </form>
 
     {% if transactions %}
-    <table>
-        <thead>
-            <tr>
-                <th>Stock Code</th>
-                <th>Description</th>
-                <th>Opening Quantity</th>
-                <th>Purchase Quantity</th>
-                <th>Sales Quantity</th>
-                <th>Variance</th>
-                <th>Stock on Hand</th>
-                <th>Latest Purchase Price</th>
-                <th>Inventory Valuation</th>
-                <th>Last Transaction Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for tx in transactions %}
-            <tr>
-                <td>{{ tx.stock_code }}</td>
-                <td>{{ tx.description }}</td>
-                <td>{{ tx.opening_quantity|floatformat:2|intcomma }}</td>
-                <td>{{ tx.purchase_quantity|floatformat:2|intcomma }}</td>
-                <td>{{ tx.sales_quantity|floatformat:2|intcomma }}</td>
-                <td>{{ tx.variance|floatformat:2|intcomma }}</td>
-                <td>{{ tx.quantity_on_hand|floatformat:2|intcomma }}</td>
-                <td>R {{ tx.latest_price|floatformat:2|intcomma }}</td>
-                <td>R {{ tx.valuation|floatformat:2|intcomma }}</td>
-                <td>{{ tx.transaction_date|date:"d M Y" }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="10">No transactions found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Stock Code</th>
+                    <th>Description</th>
+                    <th>Opening Quantity</th>
+                    <th>Purchase Quantity</th>
+                    <th>Sales Quantity</th>
+                    <th>Variance</th>
+                    <th>Stock on Hand</th>
+                    <th>Latest Purchase Price</th>
+                    <th>Inventory Valuation</th>
+                    <th>Last Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in transactions %}
+                <tr>
+                    <td>{{ tx.stock_code }}</td>
+                    <td>{{ tx.description }}</td>
+                    <td>{{ tx.opening_quantity|floatformat:2|intcomma }}</td>
+                    <td>{{ tx.purchase_quantity|floatformat:2|intcomma }}</td>
+                    <td>{{ tx.sales_quantity|floatformat:2|intcomma }}</td>
+                    <td>{{ tx.variance|floatformat:2|intcomma }}</td>
+                    <td>{{ tx.quantity_on_hand|floatformat:2|intcomma }}</td>
+                    <td>R {{ tx.latest_price|floatformat:2|intcomma }}</td>
+                    <td>R {{ tx.valuation|floatformat:2|intcomma }}</td>
+                    <td>{{ tx.transaction_date|date:"d M Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10">No transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
-        <tfoot>
-            <tr>
-                <td colspan="8" style="text-align: right;"><strong>Total Inventory Valuation:</strong></td>
-                <td><strong>{{ total_valuation|floatformat:2 }}</strong></td>
-                <td></td>
-            </tr>
-        </tfoot>
-
-
-
-    </table>
+            <tfoot>
+                <tr>
+                    <td colspan="8" style="text-align: right;"><strong>Total Inventory Valuation:</strong></td>
+                    <td><strong>{{ total_valuation|floatformat:2 }}</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+            
+        </table>
+    </div>
     {% else %}
     <p>No transactions found for the selected period.</p>
     {% endif %}

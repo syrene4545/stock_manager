@@ -28,49 +28,52 @@
 </p>
 
 {% if summary %}
-<table>
-  <thead>
-    <tr>
-      <th>Stock Code</th>
-      <th>Description</th>
-      <th>Count Date</th>
-      <th>System Qty</th>
-      <th>Counted Qty</th>
-      <th>Variance</th>
-      <th>Price</th>
-      <th>Valuation</th>
-      <th>Variance Value</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in summary %}
+<div class="table-container">
+  <table>
+    <thead>
       <tr>
-        <td>{{ row.stock_code }}</td>
-        <td>{{ row.description }}</td>
-        <td>{{ row.count_date }}</td>
-        <td>{{ row.system_quantity|intcomma }}</td>
-        <td>{{ row.counted_quantity|intcomma }}</td>
-        <td style="color:{% if row.variance < 0 %}red{% elif row.variance > 0 %}green{% else %}black{% endif %}">
-          {{ row.variance|intcomma }}
-        </td>
-        <td>R {{ row.latest_price|floatformat:2|intcomma }}</td>
-        <td>R {{ row.valuation|floatformat:2|intcomma }}</td>
-        <td style="color:{% if row.variance_value < 0 %}red{% elif row.variance_value > 0 %}green{% else %}black{% endif %}">
-          R {{ row.variance_value|floatformat:2|intcomma }}
-        </td>
+        <th>Stock Code</th>
+        <th>Description</th>
+        <th>Count Date</th>
+        <th>System Qty</th>
+        <th>Counted Qty</th>
+        <th>Variance</th>
+        <th>Price</th>
+        <th>Valuation</th>
+        <th>Variance Value</th>
       </tr>
-    {% endfor %}
-    <tr style="font-weight:bold; background:#f2f2f2;">
-      <td colspan="3">TOTAL</td>
-      <td>{{ total_system_qty|intcomma }}</td>
-      <td>{{ total_counted_qty|intcomma }}</td>
-      <td>{{ total_variance_qty|intcomma }}</td>
-      <td></td>
-      <td>R {{ total_valuation|floatformat:2|intcomma }}</td>
-      <td>R {{ total_variance_value|floatformat:2|intcomma }}</td>
-    </tr>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for row in summary %}
+        <tr>
+          <td>{{ row.stock_code }}</td>
+          <td>{{ row.description }}</td>
+          <td>{{ row.count_date }}</td>
+          <td>{{ row.system_quantity|intcomma }}</td>
+          <td>{{ row.counted_quantity|intcomma }}</td>
+          <td style="color:{% if row.variance < 0 %}red{% elif row.variance > 0 %}green{% else %}black{% endif %}">
+            {{ row.variance|intcomma }}
+          </td>
+          <td>R {{ row.latest_price|floatformat:2|intcomma }}</td>
+          <td>R {{ row.valuation|floatformat:2|intcomma }}</td>
+          <td style="color:{% if row.variance_value < 0 %}red{% elif row.variance_value > 0 %}green{% else %}black{% endif %}">
+            R {{ row.variance_value|floatformat:2|intcomma }}
+          </td>
+        </tr>
+      {% endfor %}
+      <tr style="font-weight:bold; background:#f2f2f2;">
+        <td colspan="3">TOTAL</td>
+        <td>{{ total_system_qty|intcomma }}</td>
+        <td>{{ total_counted_qty|intcomma }}</td>
+        <td>{{ total_variance_qty|intcomma }}</td>
+        <td></td>
+        <td>R {{ total_valuation|floatformat:2|intcomma }}</td>
+        <td>R {{ total_variance_value|floatformat:2|intcomma }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 {% else %}
   <p>No stock counts found for the selected filters.</p>
 {% endif %}

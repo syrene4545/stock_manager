@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Important for mobile scaling -->
     <title>Inventory Management</title>
     <style>
         /* ---------- Defaults ---------- */
@@ -27,7 +29,7 @@
         /* ---------- Base layout ---------- */
         body {
             font-family: "Segoe UI", Tahoma, sans-serif;
-            margin: 40px;
+            margin: 20px;
             background-color: #fdfdfd;
             color: #333;
         }
@@ -35,22 +37,22 @@
         h1 {
             color: #4a4a4a;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
         }
 
         .tabs {
             display: flex;
             justify-content: center;
             gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 0;            /* let content rise to meet tabs */
+            flex-wrap: wrap; /* Allows wrapping on small screens */
+            margin-bottom: 0;
             position: relative;
             z-index: 2;
         }
 
         .tab {
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 15px 15px 0 0;
             text-decoration: none;
             color: #444;
@@ -58,6 +60,7 @@
             border: 1px solid var(--tab-default-border);
             transition: all 0.25s ease;
             font-weight: 500;
+            font-size: 0.95rem;
         }
 
         .tab:hover {
@@ -69,24 +72,95 @@
             background-color: var(--accent-bg);
             border-color: var(--accent);
             color: #222;
-            border-bottom: none;         /* merge visually with content box */
+            border-bottom: none;
             position: relative;
             z-index: 3;
         }
 
         .content {
             border: 1px solid var(--accent);
-            padding: 25px;
+            padding: 20px;
             border-radius: 0 15px 15px 15px;
             background-color: var(--panel-bg);
-            box-shadow: 0 6px 14px var(--shadow);
-            margin-top: -1px;            /* pull up to “wrap” active tab */
+            box-shadow: 0 4px 10px var(--shadow);
+            margin-top: -1px;
             position: relative;
             z-index: 1;
         }
+
+        /* ---------- Responsive adjustments ---------- */
+        @media (max-width: 768px) {
+            body {
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+            }
+
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 5px;
+            }
+
+            .tab {
+                text-align: center;
+                border-radius: 10px;
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            .content {
+                padding: 15px;
+                border-radius: 10px;
+            }
+        }
+
+        /* ---------- Responsive tables ---------- */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        /* Keep table looking good */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 600px; /* prevents squishing if many columns */
+        }
+
+        /* Sticky header magic */
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: var(--accent-bg);
+            z-index: 2; /* stay above table cells */
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            text-align: left;
+            font-size: 0.95rem;
+            white-space: nowrap; /* prevent text wrapping that breaks alignment */
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                font-size: 0.85rem;
+                padding: 6px 8px;
+            }
+        }
+
+
     </style>
 </head>
-<!-- Add the theme class using your Django active_tab -->
 <body class="theme-{% if active_tab %}{{ active_tab }}{% else %}dashboard{% endif %}">
     <h1>Inventory Management System</h1>
 

@@ -21,59 +21,65 @@
 
 <!-- Top Items -->
 <h3>Top 5 Sales This Month</h3>
-<table>
-  <thead>
-    <tr><th>Stock Code</th><th>Description</th><th>Quantity</th><th>Value</th></tr>
-  </thead>
-  <tbody>
-  {% for item in top_sales_items %}
-    <tr>
-      <td>{{ item.stock_code__stock_code }}</td>
-      <td>{{ item.stock_code__stock_description }}</td>
-      <td>{{ item.total_qty|intcomma }}</td>
-      <td>R {{ item.total_value|floatformat:2|intcomma }}</td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="4">No sales this month</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Stock Code</th><th>Description</th><th>Quantity</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+    {% for item in top_sales_items %}
+      <tr>
+        <td>{{ item.stock_code__stock_code }}</td>
+        <td>{{ item.stock_code__stock_description }}</td>
+        <td>{{ item.total_qty|intcomma }}</td>
+        <td>R {{ item.total_value|floatformat:2|intcomma }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No sales this month</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 <h3>Top 5 Purchases This Month</h3>
-<table>
-  <thead>
-    <tr><th>Stock Code</th><th>Description</th><th>Quantity</th><th>Value</th></tr>
-  </thead>
-  <tbody>
-  {% for item in top_purchases_items %}
-    <tr>
-      <td>{{ item.stock_code__stock_code }}</td>
-      <td>{{ item.stock_code__stock_description }}</td>
-      <td>{{ item.total_qty|intcomma }}</td>
-      <td>R {{ item.total_value|floatformat:2|intcomma }}</td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="4">No purchases this month</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Stock Code</th><th>Description</th><th>Quantity</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+    {% for item in top_purchases_items %}
+      <tr>
+        <td>{{ item.stock_code__stock_code }}</td>
+        <td>{{ item.stock_code__stock_description }}</td>
+        <td>{{ item.total_qty|intcomma }}</td>
+        <td>R {{ item.total_value|floatformat:2|intcomma }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No purchases this month</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 <!-- Trend Data -->
 <h3>Purchases vs Sales (Last 6 Months)</h3>
-<table>
-  <thead>
-    <tr><th>Month</th><th>Purchases</th><th>Sales</th></tr>
-  </thead>
-  <tbody>
-  {% for row in trends %}
-    <tr>
-      <td>{{ row.month }}</td>
-      <td>{{ row.purchases|intcomma }}</td>
-      <td>{{ row.sales|intcomma }}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Month</th><th>Purchases</th><th>Sales</th></tr>
+    </thead>
+    <tbody>
+    {% for row in trends %}
+      <tr>
+        <td>{{ row.month }}</td>
+        <td>{{ row.purchases|intcomma }}</td>
+        <td>{{ row.sales|intcomma }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 <h3>Quick Actions</h3>
 <ul>
