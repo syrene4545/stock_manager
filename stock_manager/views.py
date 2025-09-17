@@ -14,18 +14,40 @@ import logging
 from decimal import Decimal
 import calendar
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
  
-def debug_view(request):
-    return HttpResponse(f"Host: {request.get_host()}")
 
+@login_required
+def dashboard_view(request):
+    return render(request, 'dashboard.html')
+
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.is_active = False  # Require admin approval
+        user.save()
+
+        messages.success(request, "Registration submitted. Await admin approval.")
+        return redirect('registration_pending')
+    return render(request, 'register.html')
+
+
+def registration_pending_view(request):
+    return render(request, 'registration_pending.html')
+
+
+
+def landing_view(request):
+    return render(request, 'landing.html')
 
 def audit_log_view(request):
     logs = AuditLog.objects.order_by('-timestamp')[:100]  # Limit to recent 100
     return render(request, 'audit_log.html', {'logs': logs})
 
-# def generate_document_number():
-#     timestamp = now().strftime('%Y%m%d%H%M%S')
-#     return f"SAL-{timestamp}"
 
 def generate_document_number():
     last_sale = Sale.objects.order_by('-id').first()
