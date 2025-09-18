@@ -4,37 +4,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ makes it responsive -->
     <title>Welcome to Stock Manager</title>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f8;
             margin: 0;
-            padding: 0;
+            padding: env(safe-area-inset);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
             background-color: #ffffff;
-            padding: 40px;
+            padding: 30px 20px;
             border-radius: 10px;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 360px;
+            width: 90%;             /* ✅ responsive width */
+            max-width: 400px;       /* ✅ prevents it from being too wide */
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 1.8rem;      /* ✅ scalable font size */
             margin-bottom: 16px;
             color: #333;
         }
 
         p {
-            font-size: 16px;
-            margin-bottom: 32px;
+            font-size: 1rem;
+            margin-bottom: 24px;
             color: #555;
         }
 
@@ -42,17 +47,37 @@
             display: block;
             width: 100%;
             padding: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            font-size: 15px;
+            font-size: 1rem;
             transition: background-color 0.3s ease;
         }
 
+        .btn:focus {
+            outline: 2px solid #0056b3;
+            outline-offset: 2px;
+        }
+
+
         .btn:hover {
             background-color: #0056b3;
+        }
+
+        /* ✅ Mobile refinements */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            p {
+                font-size: 0.9rem;
+            }
+            .btn {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -65,4 +90,3 @@
     </div>
 </body>
 </html>
-

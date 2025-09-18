@@ -53,8 +53,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'stock_manager.middleware.SessionTimeoutMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -69,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'stock_manager.context_processors.session_timeout_settings',  # ✅ new
             ],
         },
     },
@@ -140,3 +143,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Automatically log out users after 30 minutes of inactivity
+SESSION_COOKIE_AGE = 900  # seconds (30 minutes)
+
+# Reset the timer on every request
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Optional: Make session expire when browser closes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Custom idle timeout (tracked via middleware)
+SESSION_IDLE_TIMEOUT = 900  # 900 seconds = 15 minutes
+
+SESSION_WARNING_TIME = 120   # warn 1 minute before logout

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="help-guide">
+    <h2>📘 Help Guide: Stock Manager App</h2>
+    <p>Welcome to <strong>Stock Manager</strong>, your all-in-one inventory tracking system. This guide walks you through each core feature of the app so you can manage stock confidently and efficiently.</p>
+
+    <h3>🧾 1. Stock Master</h3>
+    <ul>
+        <li>Enter the <strong>Stock Code</strong> (unique identifier)</li>
+        <li>Provide a <strong>Stock Description</strong> (e.g. "Blue Pens – Box of 12")</li>
+        <li>Select the <strong>Unit of Measure</strong> (e.g. "Boxes", "Liters", "Units")</li>
+    </ul>
+
+    <h3>📦 2. Purchases</h3>
+    <ul>
+        <li>Enter the <strong>Transaction Date</strong> (invoice date or opening stock date)</li>
+        <li>Enter the <strong>Supplier Name</strong> or "Opening Stock"</li>
+        <li>Provide the <strong>Document Number</strong> (e.g. invoice number)</li>
+        <li>For each item:
+            <ul>
+                <li>Select <strong>Stock Code</strong> from dropdown</li>
+                <li>Enter <strong>Quantity</strong></li>
+                <li>Enter <strong>Price per Unit</strong></li>
+            </ul>
+        </li>
+        <li>Click <strong>Add Row</strong> for multiple items</li>
+        <li>Click <strong>"×"</strong> to remove an item</li>
+        <li><strong>Total Invoice Value</strong> updates automatically</li>
+        <li>Click <strong>Add Stock</strong> to save</li>
+        <li>A summary invoice confirms the entry</li>
+    </ul>
+
+    <h3>💰 3. Sales</h3>
+    <ul>
+        <li>Enter the <strong>Transaction Date</strong></li>
+        <li>Enter the <strong>Customer Name</strong></li>
+        <li><strong>Invoice Number</strong> is generated automatically</li>
+        <li>For each item:
+            <ul>
+                <li>Select <strong>Stock Code</strong></li>
+                <li>Enter <strong>Quantity</strong></li>
+                <li>Enter <strong>Price per Unit</strong></li>
+            </ul>
+        </li>
+        <li>Click <strong>Add Row</strong> for multiple items</li>
+        <li><strong>Total Invoice Value</strong> updates automatically</li>
+        <li>Click <strong>Submit Sales</strong> to save</li>
+        <li>A summary sales invoice will be displayed</li>
+    </ul>
+
+    <h3>📊 4. Stock Count</h3>
+    <ul>
+        <li>Enter the <strong>Date of Count</strong></li>
+        <li>For each item:
+            <ul>
+                <li>Select <strong>Stock Code</strong></li>
+                <li>Enter <strong>Quantity Counted</strong></li>
+            </ul>
+        </li>
+        <li>Click <strong>Add Row</strong> for multiple items</li>
+        <li>Click <strong>Submit</strong> to save</li>
+        <li>Stock on hand is adjusted automatically</li>
+        <li>A <strong>variance report</strong> appears in the Inventory Summary</li>
+    </ul>
+
+    <p>If you need further assistance, contact your system administrator or support team.</p>
+</div>
+{% endblock %}

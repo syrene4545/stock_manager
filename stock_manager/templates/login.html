@@ -2,29 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Responsive scaling -->
     <title>Login | Stock Manager</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
 
         .login-box {
             background-color: #ffffff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 320px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;             /* ✅ Responsive width */
+            max-width: 400px;       /* ✅ Prevents overflow on large screens */
         }
 
         h2 {
-            text-align: center;
-            margin-bottom: 24px;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
             color: #333;
         }
 
@@ -33,12 +37,12 @@
         form input[type="password"],
         form button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 16px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 1rem;
         }
 
         form button {
@@ -52,6 +56,37 @@
         form button:hover {
             background-color: #0056b3;
         }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 16px;
+        }
+
+        .forgot-password a {
+            font-size: 0.9rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            form input,
+            form button {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .forgot-password a {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -60,6 +95,9 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
+            <div class="forgot-password">
+                <a href="{% url 'password_reset' %}">Forgot password?</a>
+            </div>
             <button type="submit">Log in</button>
         </form>
     </div>

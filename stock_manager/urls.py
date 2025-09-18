@@ -2,10 +2,11 @@ from django.urls import path
 from . import views
 from .views import audit_log_view
 from django.contrib.auth import views as auth_views
-from .views import landing_view
+from .views import landing_view, help_page
 from .views import register_view
 from .views import dashboard_view
 from .views import registration_pending_view
+from .views import ping_session
 
 urlpatterns = [
     path('register/', register_view, name='register'),
@@ -23,7 +24,14 @@ urlpatterns = [
     path('audit-log/', audit_log_view, name='audit_log'),
     path('sales/receipt/<str:document_number>/', views.sale_receipt, name='sale_receipt'),
     path('purchases/invoice/<str:document_number>/', views.purchase_invoice, name='purchase_invoice'),
-    
+    path('password-reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='landing'), name='logout'),
+    path('ping-session/', ping_session, name='ping_session'),
+    path('help/', help_page, name='help_page'),
+
 
 
 ]

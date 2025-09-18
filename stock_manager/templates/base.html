@@ -158,11 +158,158 @@
             }
         }
 
+        /* Freeze first column */
+        th:first-child,
+        td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: inherit;  /* ensure it doesn’t overlap with other cells */
+            box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+            z-index: 3; /* keep it above other cells */
+        }
+
+        /* Keep header cell for first column above everything */
+        thead th:first-child {
+            z-index: 4;
+            background-color: var(--accent-bg);
+        }
+
+        /* .logout-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .btn-logout {
+            padding: 10px 16px;
+            background-color: #ffffff;
+            color: rgb(35, 23, 23);
+            border: 1px solid #1c1515;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #b96c6c;
+        }
+
+        @media (max-width: 480px) {
+            .logout-container {
+                top: 10px;
+                right: 10px;
+            }
+
+            .btn-logout {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        } */
+
+        .top-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .btn-logout,
+        .btn-help {
+            padding: 10px 16px;
+            font-size: 14px;
+            border: 1px solid #1c1515;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-logout {
+            background-color: #ffffff;
+            color: rgb(33, 11, 11);
+        }
+
+        .btn-logout:hover {
+            background-color: #8b4249;
+        }
+
+        .btn-help {
+            background-color: #ffffff;
+            color: rgb(33, 11, 11);
+        }
+
+        .btn-help:hover {
+            background-color: #418893;
+        }
+
+        @media (max-width: 480px) {
+            .top-buttons {
+                top: 10px;
+                right: 10px;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .btn-logout,
+            .btn-help {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        .help-guide {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .help-guide h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .help-guide h3 {
+            margin-top: 30px;
+            color: #333;
+        }
+
+        .help-guide ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
 
     </style>
 </head>
+
 <body class="theme-{% if active_tab %}{{ active_tab }}{% else %}dashboard{% endif %}">
     <h1>Inventory Management System</h1>
+
+    <!-- <div class="logout-container">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div> -->
+
+    <div class="top-buttons">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+        <a href="{% url 'help_page' %}" class="btn-help">Help</a>
+    </div>
+
+    
+
 
     <div class="tabs">
         <a href="{% url 'dashboard' %}"                 class="tab {% if active_tab == 'dashboard' %}active{% endif %}">Dashboard</a>
@@ -177,5 +324,69 @@
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+
+    <!-- Session Timeout Warning Modal -->
+    <div id="timeout-warning" 
+        style="display:none; position:fixed; bottom:20px; right:20px; 
+                background:#fff3cd; border:1px solid #ffeeba; padding:15px; 
+                border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.2); 
+                font-size:14px; z-index:9999;">
+        ⚠️ You will be logged out in <span id="countdown"></span> seconds due to inactivity. 
+        <button onclick="resetTimer()" style="margin-left:10px; padding:5px 10px; background:#007bff; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+            Stay Logged In
+        </button>
+    </div>
+
+    <script>
+        const idleTimeout = {{ SESSION_IDLE_TIMEOUT|default:900 }};
+        const warningTime = {{ SESSION_WARNING_TIME|default:120 }};
+        let idleTimer, warningTimer, countdownInterval;
+
+        function startTimers() {
+            clearTimeout(idleTimer);
+            clearTimeout(warningTimer);
+            clearInterval(countdownInterval);
+            document.getElementById('timeout-warning').style.display = "none";
+
+            // Warn user before timeout
+            warningTimer = setTimeout(showWarning, (idleTimeout - warningTime) * 1000);
+
+            // Force logout after idleTimeout
+            idleTimer = setTimeout(autoLogout, idleTimeout * 1000);
+        }
+
+        function showWarning() {
+            let countdown = warningTime;
+            document.getElementById('countdown').innerText = countdown;
+            document.getElementById('timeout-warning').style.display = "block";
+
+            countdownInterval = setInterval(() => {
+                countdown--;
+                document.getElementById('countdown').innerText = countdown;
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            fetch(window.location.href, {method: "GET", credentials: "same-origin"}); // ping server
+            startTimers();
+        }
+
+        function autoLogout() {
+            window.location.href = "{% url 'login' %}";  // redirect to login
+        }
+
+        // Reset timers on activity
+        ["click","mousemove","keypress","scroll","touchstart"].forEach(evt => {
+            document.addEventListener(evt, resetTimer);
+        });
+
+        startTimers();
+    </script>
+
+
+
 </body>
 </html>

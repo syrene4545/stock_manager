@@ -4,6 +4,16 @@
 
 <h2>📊 Monthly Inventory Dashboard</h2>
 
+{% if messages %}
+  <div class="messages-container">
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
 <!-- KPI Cards -->
 <div style="display: flex; gap: 20px; margin-bottom: 20px;">
   <div><strong>Opening Stock</strong><br>{{ opening_stock|intcomma }} units<br>R {{ opening_value|floatformat:2|intcomma }}</div>

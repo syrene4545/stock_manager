@@ -15,11 +15,21 @@ from decimal import Decimal
 import calendar
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
  
 
 @login_required
 def dashboard_view(request):
     return render(request, 'dashboard.html')
+
+
+@login_required
+def ping_session(request):
+    # Just touches the session to reset expiry
+    request.session.modified = True
+    return JsonResponse({'status': 'ok'})
+
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -82,6 +92,10 @@ def add_transaction(request):
 
 
 def add_purchase(request):
+     # ✅ Clear any lingering messages from previous views
+    storage = messages.get_messages(request)
+    list(storage)  # This consumes and clears the message queue
+
     LineFormSet = formset_factory(PurchaseLineForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
@@ -146,9 +160,11 @@ def purchase_invoice(request, document_number):
 
 
 def add_sale(request):
-    LineFormSet = formset_factory(SaleLineForm, extra=1, can_delete=True)
+    # ✅ Clear any lingering messages from previous views
+    storage = messages.get_messages(request)
+    list(storage)  # This consumes and clears the message queue
 
-    
+    LineFormSet = formset_factory(SaleLineForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
         header_form = SaleHeaderForm(request.POST)
@@ -733,3 +749,6 @@ def inventory_summary(request):
         'total_variance_value': total_variance_value,
         'active_tab': 'summary',
     })
+
+def help_page(request):
+    return render(request, 'help.html', {'active_tab': 'help'})
