@@ -174,40 +174,7 @@
             background-color: var(--accent-bg);
         }
 
-        /* .logout-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .btn-logout {
-            padding: 10px 16px;
-            background-color: #ffffff;
-            color: rgb(35, 23, 23);
-            border: 1px solid #1c1515;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-logout:hover {
-            background-color: #b96c6c;
-        }
-
-        @media (max-width: 480px) {
-            .logout-container {
-                top: 10px;
-                right: 10px;
-            }
-
-            .btn-logout {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-        } */
-
+       
         .top-buttons {
             position: absolute;
             top: 20px;
@@ -293,13 +260,6 @@
 <body class="theme-{% if active_tab %}{{ active_tab }}{% else %}dashboard{% endif %}">
     <h1>Inventory Management System</h1>
 
-    <!-- <div class="logout-container">
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn-logout">Logout</button>
-        </form>
-    </div> -->
-
     <div class="top-buttons">
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
@@ -307,9 +267,6 @@
         </form>
         <a href="{% url 'help_page' %}" class="btn-help">Help</a>
     </div>
-
-    
-
 
     <div class="tabs">
         <a href="{% url 'dashboard' %}"                 class="tab {% if active_tab == 'dashboard' %}active{% endif %}">Dashboard</a>
